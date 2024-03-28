@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend para API Nest.js</title>
+</head>
+<body>
+    <h1>Frontend para API Nest.js</h1>
+
+    <!-- Formulario para agregar un nuevo enlace -->
+    <h2>Agregar Nuevo Enlace</h2>
+    <form id="addLinkForm">
+        <label for="linkInput">URL:</label>
+        <input type="text" id="linkInput" name="linkInput" required>
+        <button type="submit">Agregar</button>
+    </form>
+
+    <!-- Lista de enlaces -->
+    <h2>Lista de Enlaces</h2>
+    <ul id="linkList"></ul>
+
+    <script>
+        // Función para agregar un nuevo enlace
+        async function addLink(event) {
+            event.preventDefault(); // Evitar el envío del formulario por defecto
+
+            const linkInput = document.getElementById('linkInput').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/links', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ link: linkInput })
+                });
+
+                if (response.ok) {
+                    alert('Enlace agregado exitosamente.');
+                    document.getElementById('linkInput').value = ''; // Limpiar el campo de texto después de agregar el enlace
+                    await fetchLinks(); // Actualizar la lista de enlaces después de agregar uno nuevo
+                } else {
+                    alert('Error al agregar el enlace: ' + response.statusText);
+                }
+            } catch (error) {
+                console.error('Error de red:', error);
+            }
+        }
+
+        // Función para obtener y mostrar la lista de enlaces
+        async function fetchLinks() {
+            try {
+                const response = await fetch('http://localhost:3000/links');
+                const data = await response.json();
+
+                const linkList = document.getElementById('linkList');
+                linkList.innerHTML = ''; // Limpiar la lista antes de agregar los nuevos elementos
+
+                data.forEach(link => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = link.link;
+                    linkList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error de red:', error);
+            }
+        }
+
+        document.getElementById('addLinkForm').addEventListener('submit', addLink);
+
+        // Cargar la lista de enlaces al cargar la página
+        fetchLinks();
+    </script>
+</body>
+</html>
