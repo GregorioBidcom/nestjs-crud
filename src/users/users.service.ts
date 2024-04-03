@@ -11,9 +11,13 @@ export class UsersService {
 
     constructor(@InjectRepository(Link) private linkRepository: Repository<Link>) {}
 
-    createLink(link: createLinkDto){
-        const newLink = this.linkRepository.create(link)
-        return this.linkRepository.save(newLink)
+    async createLink(link: createLinkDto) {
+        const newLink = this.linkRepository.create(link);
+        //Todos los links se crean con una hora de valides, pasada esa hora ya no son validos
+        const expirationDate = new Date();
+        expirationDate.setTime(expirationDate.getTime() + (60 * 60 * 1000)); // Sumar 1 hora en milisegundos
+        newLink.expiredAt = expirationDate;
+        return this.linkRepository.save(newLink);
     }
 
     getAllLinks(){

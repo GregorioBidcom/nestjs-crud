@@ -8,11 +8,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [TypeOrmModule.forRoot({
     type: "mysql",
-    username: "root",
-    host: "localhost",
-    password: "$Bidcom123",
+    username: "usrbidcom_us",
+    host: "200.58.123.140",
+    password: "pwdbB1dc0m",
     port: 3306,
-    database: "crud_nest",
+    database: "test",
     entities: [__dirname + '/**/*.entity.{js, ts}'],
     synchronize: true
 

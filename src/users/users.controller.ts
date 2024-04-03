@@ -8,7 +8,10 @@ import { Link } from './user.entity';
 @Controller('links')
 export class UsersController {
 
-    constructor (private linkService: UsersService) {}
+    constructor (private linkService: UsersService) {
+        const asd = Date.now()
+        console.log(asd)
+    }
 
     @Post() // Crear un link
     async createLink(@Body() newLink: createLinkDto, @Query('pass') pass: string) {
