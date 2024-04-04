@@ -23,7 +23,9 @@ export class UsersController {
 
     @Get() //Todos los Link
     readLinks() : Promise<Link[]>{
-        return this.linkService.getAllLinks()
+        const data = this.linkService.getAllLinks()
+
+        return data
     }
 
     @Get('/stats/:link') 

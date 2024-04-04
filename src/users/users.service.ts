@@ -9,7 +9,7 @@ import { updateLinkDto } from './dto/update-link.dto';
 @Injectable()
 export class UsersService {
 
-    constructor(@InjectRepository(Link) private linkRepository: Repository<Link>) {}
+    constructor(@InjectRepository(Link) public linkRepository: Repository<Link>) {}
 
     async createLink(link: createLinkDto) {
         const newLink = this.linkRepository.create(link);
@@ -69,13 +69,16 @@ export class UsersService {
         return null
     }
 
-    invalidLink(link: string){
-        const valid = this.linkRepository.update({link}, {valid: 1})
-        if(valid){
-            return 'URL invalidada correctamente'
-        }
-        else{
-            return '404'
-        }
+    invalidLink(link: string): Promise<string> {
+        console.log(link)
+        return new Promise((resolve, reject) => {
+            this.linkRepository.update({ link }, { valid: 1 })
+                .then(() => {
+                    resolve('URL invalidada correctamente');
+                })
+                .catch(() => {
+                    reject('404');
+                });
+        });
     }
 }
